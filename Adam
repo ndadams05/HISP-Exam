@@ -1,0 +1,59 @@
+import React, { useState } from 'react';
+import './App.css';
+
+const data = [
+  // ... (your JSON data here)
+];
+
+function App() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [providerTypeFilter, setProviderTypeFilter] = useState('');
+  const [insuranceFilter, setInsuranceFilter] = useState('');
+
+  const filteredProviders = data.filter((provider) => {
+    return (
+      provider.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (providerTypeFilter === '' || provider.type === providerTypeFilter) &&
+      (insuranceFilter === '' || provider.insurance.includes(insuranceFilter))
+    );
+  });
+
+  return (
+    <div className="App">
+      <h1>Healthcare Directory</h1>
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <select
+        value={providerTypeFilter}
+        onChange={(e) => setProviderTypeFilter(e.target.value)}
+      >
+        <option value="">All Types</option>
+        <option value="doctor">Doctor</option>
+        <option value="hospital">Hospital</option>
+      </select>
+      <select
+        value={insuranceFilter}
+        onChange={(e) => setInsuranceFilter(e.target.value)}
+      >
+        <option value="">All Insurances</option>
+        <option value="RAMA">RAMA</option>
+        {/* Add other insurance options as needed */}
+      </select>
+
+      <ul>
+        {filteredProviders.map((provider) => (
+          <li key={provider.id}>
+            <strong>{provider.name}</strong>
+            <p>Type: {provider.type}</p>
+            <p>Specialty: {provider.specialty || 'N/A'}</p>
+            <p>Address: {provider.address}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
